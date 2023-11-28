@@ -6,10 +6,11 @@ import { CaretLeft } from "phosphor-react-native";
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
  `;
 
  export const Logo = styled.Image`
-    width: 46px;
+    width: 40px;
     height: 46px;
  `;
 
