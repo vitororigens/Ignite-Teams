@@ -16,6 +16,9 @@
       "@routes/*":[
         "./src/routes/*"
       ],
+      "@storage/*":[
+        "./src/storage/*"
+      ],
     }
   }
 }
