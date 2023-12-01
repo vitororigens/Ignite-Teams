@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { Header } from "@components/Header";
@@ -16,12 +16,20 @@ type RouteParams = {
 }
 
 export function Players() {
+    const [newPlayer, setNewPlayer] = useState('')
     const [team, setTeam] = useState('Team A')
     const [players, setPlayers] = useState([])
 
     const route = useRoute()
 
     const {groups} = route.params as RouteParams;
+
+    async function handleAddPlayer() {
+        if(newPlayer.trim().length > 0) {
+            return Alert.alert('Nova pessoa', 'Informe o nome da pessoa para adicionar.')
+        }
+    }
+
     return (
         <Container>
             <Header showBackButton />
@@ -31,10 +39,14 @@ export function Players() {
             />
             <Form>
                 <Input
+                    onChangeText={setNewPlayer}
                     placeholder="Nome da pessoa"
                     autoCorrect={false}
                 />
-                <ButtonIcon icon="add" />
+                <ButtonIcon
+                onPress={handleAddPlayer}
+                icon="add"
+                 />
             </Form>
 
             <HeaderList>
