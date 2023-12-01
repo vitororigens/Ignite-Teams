@@ -1,6 +1,6 @@
 import { TouchableOpacityProps } from "react-native";
-import { ButtonIconTypeProps, Container, Icon } from "./styles";
 import {MaterialIcons} from "@expo/vector-icons"
+import { ButtonIconTypeProps, Container, Icon } from "./styles";
 
 type Props = TouchableOpacityProps & {
     icon: keyof typeof MaterialIcons.glyphMap;

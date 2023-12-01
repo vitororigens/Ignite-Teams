@@ -1,4 +1,3 @@
-import theme from "src/theme";
 import {MaterialIcons} from "@expo/vector-icons";
 import styled, { css } from "styled-components/native";
 
