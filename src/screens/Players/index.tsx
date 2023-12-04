@@ -10,23 +10,44 @@ import { Filter } from "@components/Filter";
 import { PlayerCard } from "@components/PlayerCard";
 import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
+import { AppError } from "@utils/AppError";
+import { playerAddByGroup } from "@storage/player/playerAddByGroup";
+import { playersGetByGroup } from "@storage/player/PlayersGetByGroup";
 
 type RouteParams = {
     groups: string;
 }
 
 export function Players() {
-    const [newPlayer, setNewPlayer] = useState('')
+    const [newPlayerName, setNewPlayerName] = useState('')
     const [team, setTeam] = useState('Team A')
     const [players, setPlayers] = useState([])
 
     const route = useRoute()
 
-    const {groups} = route.params as RouteParams;
+    const { groups } = route.params as RouteParams;
 
     async function handleAddPlayer() {
-        if(newPlayer.trim().length > 0) {
+        if (newPlayerName.trim().length === 0) {
             return Alert.alert('Nova pessoa', 'Informe o nome da pessoa para adicionar.')
+        }
+
+        const newPlayer = {
+            name: newPlayerName,
+            team
+        }
+
+        try {
+            await playerAddByGroup(newPlayer, groups);
+            const players =  await playersGetByGroup(groups);
+            console.log(players)
+        } catch (error) {
+            if (error instanceof AppError) {
+                Alert.alert('Nova pessoa', error.message);
+            } else {
+                console.log(error);
+                Alert.alert('Nova pessoa', 'Não foi possivel adicionar nova pessoa.');
+            }
         }
     }
 
@@ -39,14 +60,14 @@ export function Players() {
             />
             <Form>
                 <Input
-                    onChangeText={setNewPlayer}
+                    onChangeText={setNewPlayerName}
                     placeholder="Nome da pessoa"
                     autoCorrect={false}
                 />
                 <ButtonIcon
-                onPress={handleAddPlayer}
-                icon="add"
-                 />
+                    onPress={handleAddPlayer}
+                    icon="add"
+                />
             </Form>
 
             <HeaderList>
@@ -67,29 +88,29 @@ export function Players() {
                 </NumberOfPlayers>
             </HeaderList>
             <FlatList
-            data={players}
-            keyExtractor={item => item}
-            renderItem={({ item }) =>(
-                <PlayerCard
-                    onRemove={()=> ({})}
-                    name={item}
-                />
-            )}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={() => (
-                <ListEmpty
-                 message="Não pessoas nesse time"
-                />
-            )}
-            contentContainerStyle={[
-                {paddingBottom:100},
-                players.length === 0 && {flex: 1}
-            
-            ]}
+                data={players}
+                keyExtractor={item => item}
+                renderItem={({ item }) => (
+                    <PlayerCard
+                        onRemove={() => ({})}
+                        name={item}
+                    />
+                )}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={() => (
+                    <ListEmpty
+                        message="Não pessoas nesse time"
+                    />
+                )}
+                contentContainerStyle={[
+                    { paddingBottom: 100 },
+                    players.length === 0 && { flex: 1 }
+
+                ]}
             />
             <Button
-             title="Remover Turma"
-             type="SECONDARY" 
+                title="Remover Turma"
+                type="SECONDARY"
             />
 
         </Container>
