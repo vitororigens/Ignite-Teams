@@ -10,3 +10,4 @@ export async function playersGetByGroupAndTeam(group: string, team: string) {
     } catch (error) {
         throw error
     }
+}

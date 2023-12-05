@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Alert, FlatList } from "react-native";
+import { useState, useEffect, useRef } from "react";
+import { Alert, FlatList, TextInput } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { Header } from "@components/Header";
@@ -26,6 +26,8 @@ export function Players() {
 
     const route = useRoute()
 
+    const newPlayerNameInputRef = useRef<TextInput>(null)
+
     const { groups } = route.params as RouteParams;
 
     async function handleAddPlayer() {
@@ -40,7 +42,11 @@ export function Players() {
 
         try {
             await playerAddByGroup(newPlayer, groups);
-           
+
+            newPlayerNameInputRef.current?.blur()
+
+            setNewPlayerName('')
+            fetchPlayersByTeam()
         } catch (error) {
             if (error instanceof AppError) {
                 Alert.alert('Nova pessoa', error.message);
@@ -62,6 +68,12 @@ export function Players() {
         
     }
 
+    useEffect(() => {
+      fetchPlayersByTeam()
+   
+    }, [team])
+    
+
     return (
         <Container>
             <Header showBackButton />
@@ -71,9 +83,13 @@ export function Players() {
             />
             <Form>
                 <Input
+                    inputRef={newPlayerNameInputRef}
                     onChangeText={setNewPlayerName}
+                    value={newPlayerName}
                     placeholder="Nome da pessoa"
                     autoCorrect={false}
+                    onSubmitEditing={handleAddPlayer}
+                    returnKeyType="done"
                 />
                 <ButtonIcon
                     onPress={handleAddPlayer}
@@ -100,17 +116,17 @@ export function Players() {
             </HeaderList>
             <FlatList
                 data={players}
-                keyExtractor={item => item}
+                keyExtractor={item => item.name}
                 renderItem={({ item }) => (
                     <PlayerCard
                         onRemove={() => ({})}
-                        name={item}
+                        name={item.name}
                     />
                 )}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={() => (
                     <ListEmpty
-                        message="Não pessoas nesse time"
+                        message="Não há pessoas nesse time"
                     />
                 )}
                 contentContainerStyle={[
