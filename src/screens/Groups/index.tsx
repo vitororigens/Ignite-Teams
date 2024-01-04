@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
-import { FlatList } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 //
 import { Container } from './styles';
 //
@@ -30,7 +30,7 @@ export function Groups() {
       setGroups(data)
 
     } catch (error) {
-
+      Alert.alert('Turmas', 'Não foi possivel carregar os grupos.')
       console.log(error)
     
     }
