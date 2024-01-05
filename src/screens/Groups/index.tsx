@@ -61,6 +61,10 @@ export function Groups() {
 
       {isLoading ? <Loading/> :
       <FlatList
+      style={{
+        height: 200,
+        marginBottom:14,
+      }}
       data={groups}
       keyExtractor={item => item}
       renderItem={({ item }) => (

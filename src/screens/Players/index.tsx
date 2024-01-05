@@ -31,7 +31,7 @@ export function Players() {
     const [players, setPlayers] = useState<PlayerStorageDTO[]>([])
     const [newPlayerName, setNewPlayerName] = useState('')
     const [isLoading, setIsLoading] = useState(true)
-    const [team, setTeam] = useState('Team A')
+    const [team, setTeam] = useState('time A')
     const navigation = useNavigation()
 
     const route = useRoute()
